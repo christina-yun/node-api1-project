@@ -22,7 +22,6 @@ server.get('/api/users', async (req, res) =>{
 
 // [POST] /api/users
 //Creates a user using the information sent inside the request body.
-//doesn't stop sending the request for some reason
 server.post('/api/users', async(req, res) => {
     try{
         const { name, bio } = req.body;
@@ -44,6 +43,24 @@ server.post('/api/users', async(req, res) => {
 
 // [GET] /api/users/:id	
 //Returns the user object with the specified id.
+server.get('/api/users/:id', async (req, res) =>{
+    try{
+        const { id } = req.params;
+        const user = await Model.findById(id);
+        if(!user) {
+            res.status(404).json({
+                message:"The user with the specified ID does not exist"
+            })
+        } else {
+            res.status(200).json(user);
+        }
+    }
+    catch(err){
+        res.status(500).json({
+            message:"The user information could not be retrieved"
+        })
+    }
+})
 
 // [DELETE] /api/users/:id	
 //Removes the user with the specified id and returns the deleted user.
