@@ -64,6 +64,24 @@ server.get('/api/users/:id', async (req, res) =>{
 
 // [DELETE] /api/users/:id	
 //Removes the user with the specified id and returns the deleted user.
+server.delete('/api/users/:id', async(req, res)=>{
+    try{
+        const { id } = req.params;
+        const deletedUser = await Model.remove(id);
+        if(!deletedUser){
+            res.status(404).json({
+                message:"The user with the specified ID does not exist"
+            })
+        } else {
+            res.json(deletedUser)
+        }
+    }
+    catch(err){
+        res.status(500).json({
+            message: "The user could not be removed"
+        })
+    }
+})
 
 // [PUT] /api/users/:id	
 //Updates the user with the specified id using data from the request body. Returns the modified user
